@@ -12,6 +12,14 @@ $params = array_merge(
 return [
   'basePath' => dirname(__DIR__),
   'controllerNamespace' => 'backend\controllers', 'bootstrap' => ['log'],
+  'container' => [
+    'singletons' => [
+      \common\domain\repositories\PlantRepositoryInterface::class => \common\domain\repositories\PlantRepository::class,
+      \common\domain\services\PlantService::class => static fn ($container) => new \common\domain\services\PlantService(
+        plantRepository: $container->get(\common\domain\repositories\PlantRepositoryInterface::class),
+      ),
+    ],
+  ],
   'modules' => [],
   'components' => [
     'request' => [
