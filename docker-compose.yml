@@ -1,0 +1,49 @@
+volumes:
+  mysql-data:
+    driver: local
+
+services:
+  nginx:
+    image: nginx
+    links:
+      - fpm
+    volumes:
+      - ./:/var/www
+      - ./docker/nginx/config:/etc/nginx/conf.d
+      - ./docker/nginx/ssl:/etc/nginx/ssl
+    ports:
+      - 80:80
+      - 8081:8081
+      - 443:443
+
+  db:
+    build: ./docker/mariadb
+    ports:
+      - 3306:3306
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./docker/mariadb/config/my.cnf:/etc/mysql/my.cnf
+      - ./docker/mariadb/db/init.sql:/docker-entrypoint-initdb.d/init.sql
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+
+  fpm:
+    build: ./docker/php8-fpm
+    volumes:
+      - ./:/var/www
+      - ./docker/php8-fpm/config/php.ini:/usr/local/etc/php/php.ini
+      - ./docker/php8-fpm/config/opcache-conf.ini:/usr/local/etc/php/conf.d/opcache-conf.ini
+      - ./docker/php8-fpm/supervisor:/etc/supervisor/conf.d
+    expose:
+      - 9000
+      - 19000
+    ports:
+      - 8443:8443
+      - 3000:3000
+      - 8080:8080
+    links:
+      - db
+    external_links:
+      - nginx:tz2.loc
+    environment:
+      PHP_IDE_CONFIG: "serverName=tz2.loc"

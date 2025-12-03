@@ -1,0 +1,20 @@
+namespace: frontend\tests
+bootstrap: _bootstrap.php
+actor: Tester
+paths:
+    tests: tests
+    log: tests/_output
+    output: tests/_output
+    data: tests/_data
+    helpers: tests/_support
+settings:
+    colors: true
+    memory_limit: 1024M
+modules:
+    config:
+        Yii2:
+            #entryUrl: 'http://test.tz2.loc/index-test.php'
+            #entryScript: 'index-test.php'
+            configFile: 'config/test-local.php'
+            transaction: true # wrap test in transaction
+            cleanup: true # cleanup the fixtures

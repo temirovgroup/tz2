@@ -1,0 +1,18 @@
+# global codeception file to run tests from all apps
+include:
+    - common
+    - common/modules/gender
+    - common/modules/downloader
+    - common/modules/lang
+    - common/modules/payment
+    - common/modules/direct
+    - common/modules/instamobile
+    - frontend/modules/cabinet
+    - frontend/modules/app
+    - frontend
+    - backend
+paths:
+    log: runtime/logs
+    output: runtime/_output
+settings:
+    colors: true
