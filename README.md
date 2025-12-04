@@ -1,17 +1,13 @@
-make up
-
-composer install
-
-php init
-
-php yii migrate/up
-
+# Установка
+`make up`
+`composer install`
+`php init`
+`php yii migrate/up`
 
 перейти в https://tz2.local/admin/
 
-username: admin
-
-password: adminadmin
+username: `admin`
+password: `adminadmin`
 
 
 <img width="1453" height="613" alt="Screenshot_1" src="https://github.com/user-attachments/assets/e14603ce-f5c7-4bcd-bb42-c4280c1de8ae" />
