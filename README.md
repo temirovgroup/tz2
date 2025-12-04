@@ -1,11 +1,16 @@
 # Установка
+
+** Создать папку logs в runtime
+
 ```make up```
 
-```composer install```
+```make bash```
 
-```php init```
-
-```php yii migrate/up```
+  ```composer install```
+  
+  ```php init```
+  
+  ```php yii migrate/up```
 
 перейти в https://tz2.local/admin/
 
