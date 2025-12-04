@@ -5,6 +5,7 @@
 
 namespace common\domain\entities;
 
+use common\domain\enums\FruitTypeEnum;
 use common\domain\enums\PlantColorEnum;
 use common\domain\enums\PlantTypeEnum;
 
@@ -13,7 +14,7 @@ class Apple extends Plant
   public static function create(PlantColorEnum $color = null): self
   {
     return new self(
-      type: 'apple',
+      type: FruitTypeEnum::APPLE->value,
       plantType: PlantTypeEnum::FRUIT,
       color: $color ?? PlantColorEnum::RED,
     );
@@ -27,10 +28,5 @@ class Apple extends Plant
   public function getRotationTimeHours(): int
   {
     return 5;
-  }
-  
-  public static function getAvailableColors(): array
-  {
-    return ['red', 'green', 'yellow', 'pink'];
   }
 }
