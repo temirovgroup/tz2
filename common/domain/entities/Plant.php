@@ -49,7 +49,6 @@ abstract class Plant
   
   abstract public function canBeEatenOnTree(): bool;
   abstract public function getRotationTimeHours(): int;
-  abstract public static function getAvailableColors(): array;
   
   public function fallToGround(): void
   {

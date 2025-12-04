@@ -7,6 +7,7 @@ namespace common\domain\factories;
 
 use common\domain\entities\Apple;
 use common\domain\entities\Plant;
+use common\domain\enums\FruitTypeEnum;
 use common\domain\enums\PlantColorEnum;
 use common\domain\enums\PlantStatusEnum;
 use common\domain\enums\PlantTypeEnum;
@@ -38,7 +39,7 @@ class PlantFactory implements PlantFactoryInterface
   private static function getPlantClass(string $type): string
   {
     return match($type) {
-      'apple' => Apple::class,
+      FruitTypeEnum::APPLE->value => Apple::class,
 //      'banana' => Banana::class, (пример)
       default => throw new \InvalidArgumentException("Неизвестный тип растения: $type"),
     };
