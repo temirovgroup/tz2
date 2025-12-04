@@ -4,6 +4,8 @@
 /** @var $plants \common\domain\entities\Plant */
 /** @var $colors array */
 
+use yii\helpers\Url;
+
 $this->title = 'My Yii Application';
 ?>
 
@@ -11,24 +13,9 @@ $this->title = 'My Yii Application';
   <div class="d-flex align-items-center justify-content-between mb-4">
     <h1>Фрукты</h1>
     
-    <div class="container">
-      <div class="row">
-        <div class="col-md-4">
-          <select class="form-select js-color-plant-choise" aria-label="Default select example">
-            <?php foreach ($colors as $key => $color) : ?>
-              <option <?= $key === 0 ? 'selected' : '' ?> value="<?= $color['value'] ?>">
-                <?= $color['label'] ?>
-              </option>
-            <?php endforeach; ?>
-          </select>
-        </div>
-        <div class="col-md-3">
-          <button type="button" class="btn btn-secondary js-create-apple">
-            Создать яблоко
-          </button>
-        </div>
-      </div>
-    </div>
+    <a href="<?= Url::to(['site/create']) ?>" class="btn btn-secondary js-create-apple">
+      Создать яблоки
+    </a>
   </div>
   
   <div class="d-flex flex-wrap justify-content-around js-plant-card-wrap">
@@ -42,7 +29,7 @@ $this->title = 'My Yii Application';
           </p>
           <?php if ($plant->isOnTree()) : ?>
             <button type="button" class="btn btn-warning mb-3 js-plant-fall-btn" data-id="<?= $plant->getId() ?>">
-              Уронить
+              Упасть
             </button>
           <?php endif; ?>
           

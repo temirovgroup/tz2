@@ -10,6 +10,7 @@ use common\domain\entities\Plant;
 use common\domain\enums\PlantColorEnum;
 use common\domain\enums\PlantStatusEnum;
 use common\domain\enums\PlantTypeEnum;
+use common\domain\factories\PlantFactory;
 use common\domain\valueObjects\Consumption;
 use common\models\Plants;
 
@@ -40,23 +41,16 @@ class PlantRepository implements PlantRepositoryInterface
   {
     $model = Plants::findOne($id);
     
-    return $model ? $this->mapToDomain($model) : null;
-  }
-  
-  public function findAll(): array
-  {
-    $models = Plants::find()->all();
-    
-    return array_map(fn($model) => $this->mapToDomain($model), $models);
+    return $model ? PlantFactory::createFromModel($model) : null;
   }
   
   public function findAllOrderByIdAsc(): array
   {
     $models = Plants::find()
-      ->orderBy(['id' => SORT_DESC])
+      ->orderBy(['id' => SORT_ASC])
       ->all();
     
-    return array_map(fn($model) => $this->mapToDomain($model), $models);
+    return array_map(fn($model) => PlantFactory::createFromModel($model), $models);
   }
   
   public function delete(Plant $plant): void
@@ -72,35 +66,6 @@ class PlantRepository implements PlantRepositoryInterface
   {
     $models = Plants::find()->where(['status' => $status])->all();
     
-    return array_map(fn($model) => $this->mapToDomain($model), $models);
-  }
-  
-  private function mapToDomain(Plants $model): Plant
-  {
-    if (!$model) {
-      throw new \InvalidArgumentException('Модель не может быть null');
-    }
-    
-    $plantClass = $this->getPlantClass($model->type);
-    
-    return new $plantClass(
-      type: $model->type,
-      plantType: PlantTypeEnum::from($model->plant_type),
-      color: PlantColorEnum::from($model->color),
-      createdAt: $model->created_at,
-      id: $model->id,
-      status: PlantStatusEnum::from($model->status),
-      consumption: new Consumption($model->consumed_percent),
-      fallenAt: $model->fallen_at,
-    );
-  }
-  
-  private function getPlantClass(string $type): string
-  {
-    return match($type) {
-      'apple' => Apple::class,
-//      'banana' => Banana::class, (пример)
-      default => throw new \InvalidArgumentException("Неизвестный тип растения: $type"),
-    };
+    return array_map(fn($model) => PlantFactory::createFromModel($model), $models);
   }
 }

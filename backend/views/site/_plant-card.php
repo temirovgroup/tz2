@@ -15,7 +15,7 @@
   </p>
   <?php if ($plant->isOnTree()) : ?>
     <button type="button" class="btn btn-warning mb-3 js-plant-fall-btn" data-id="<?= $plant->getId() ?>">
-      Уронить
+      Упасть
     </button>
   <?php endif; ?>
   

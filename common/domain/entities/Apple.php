@@ -33,9 +33,4 @@ class Apple extends Plant
   {
     return ['red', 'green', 'yellow', 'pink'];
   }
-  
-  private static function getRandomColor(): string
-  {
-    return self::getAvailableColors()[array_rand(self::getAvailableColors())];
-  }
 }

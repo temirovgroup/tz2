@@ -10,6 +10,7 @@ use Exception;
 use Yii;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
+use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\web\Response;
 
@@ -72,20 +73,30 @@ class SiteController extends Controller
     ]);
   }
   
+  /**
+   * @throws Exception
+   */
   public function actionCreate()
   {
-    $colorValue = $this->request->get('color');
-    $color = PlantColorEnum::tryFrom($colorValue) ?? PlantColorEnum::RED;
-    $plant = Apple::create($color);
-    $saved = $this->plantService->createPlant($plant);
+    $count = random_int(5, 15);
     
-    return $this->renderAjax('_plant-card', [
-      'plant' => $saved,
-    ]);
+    $plants = [];
+    
+    for ($i = 0; $i < $count; $i++) {
+      $plants[] = Apple::create($this->plantService->getRandomColor());
+    }
+    
+    $this->plantService->createPlantsInBatch($plants);
+    
+    return $this->redirect(['index']);
   }
   
   public function actionEat($id, $percent)
   {
+    if (!$this->request->isAjax) {
+      throw new BadRequestHttpException('Invalid request type');
+    }
+    
     try {
       $plant = $this->plantService->eatPlant($id, (float)$percent);
     } catch (Exception $exception) {
@@ -99,6 +110,10 @@ class SiteController extends Controller
   
   public function actionFall($id)
   {
+    if (!$this->request->isAjax) {
+      throw new BadRequestHttpException('Invalid request type');
+    }
+    
     $plant = $this->plantService->fallPlant($id);
     
     return $this->renderAjax('_plant-card', [

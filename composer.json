@@ -45,5 +45,11 @@
       "bower-asset-library": "vendor/bower",
       "npm-asset-library": "vendor/npm"
     }
+  },
+  "autoload": {
+    "psr-4": {
+      "common\\": "common/",
+      "infrastructure\\": "infrastructure/"
+    }
   }
 }

@@ -53,7 +53,7 @@ abstract class Plant
   
   public function fallToGround(): void
   {
-    if ($this->status !== PlantStatusEnum::ON_TREE) {
+    if (!$this->isOnTree()) {
       throw new \DomainException("Растение не может упасть из статуса: {$this->status->value}");
     }
     
@@ -88,7 +88,7 @@ abstract class Plant
   
   public function checkAndApplyRotation(): void
   {
-    if ($this->status !== PlantStatusEnum::FALLEN) {
+    if (!$this->isFallen()) {
       return;
     }
     
@@ -104,15 +104,15 @@ abstract class Plant
   {
     $this->checkAndApplyRotation();
     
-    if ($this->status === PlantStatusEnum::ON_TREE && !$this->canBeEatenOnTree()) {
+    if ($this->isOnTree() && !$this->canBeEatenOnTree()) {
       throw new \DomainException("Нельзя съесть - растение на дереве");
     }
     
-    if ($this->status === PlantStatusEnum::ROTTEN) {
+    if ($this->isRotten()) {
       throw new \DomainException("Нельзя съесть - растение испорчено");
     }
     
-    if ($this->status === PlantStatusEnum::CONSUMED) {
+    if ($this->isConsumed()) {
       throw new \DomainException("Нельзя съесть - полностью съедено");
     }
   }
@@ -124,7 +124,6 @@ abstract class Plant
   
   public function getStatus(): PlantStatusEnum
   {
-    $this->checkAndApplyRotation();
     return $this->status;
   }
   

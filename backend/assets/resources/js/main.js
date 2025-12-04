@@ -7,9 +7,6 @@ jQuery(document).ready(function ($) {
     $.ajax({
       url: '/admin/site/create/',
       type: 'GET',
-      data: {
-        color: $('.js-color-plant-choise').val(),
-      },
       success: function (res) {
         $('.js-plant-card-wrap').append(res);
       },
