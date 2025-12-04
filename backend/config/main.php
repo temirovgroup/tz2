@@ -12,6 +12,33 @@ $params = array_merge(
 return [
   'basePath' => dirname(__DIR__),
   'controllerNamespace' => 'backend\controllers', 'bootstrap' => ['log'],
+  /*'container' => [
+    'singletons' => [
+      \common\domain\repositories\PlantRepositoryInterface::class => \common\domain\repositories\PlantRepository::class,
+      \common\domain\services\PlantService::class => static fn ($container) => new \common\domain\services\PlantService(
+        plantRepository: $container->get(\common\domain\repositories\PlantRepositoryInterface::class),
+        transactionManager: $container->get(\infrastructure\adapters\YiiTransactionManager::class),
+        logger: $container->get(\infrastructure\adapters\YiiLogger::class),
+      ),
+    ],
+  ],*/
+  'container' => [
+    'singletons' => [
+      \common\domain\repositories\PlantRepositoryInterface::class => \common\domain\repositories\PlantRepository::class,
+      
+      \common\domain\contracts\TransactionManagerInterface::class => \infrastructure\adapters\YiiTransactionManager::class,
+      \common\domain\contracts\LoggerInterface::class => \infrastructure\adapters\YiiLogger::class,
+      
+      \infrastructure\adapters\YiiTransactionManager::class => static fn() => new \infrastructure\adapters\YiiTransactionManager(),
+      \infrastructure\adapters\YiiLogger::class => static fn() => new \infrastructure\adapters\YiiLogger(),
+      
+      \common\domain\services\PlantService::class => static fn ($container) => new \common\domain\services\PlantService(
+        plantRepository: $container->get(\common\domain\repositories\PlantRepositoryInterface::class),
+        transactionManager: $container->get(\infrastructure\adapters\YiiTransactionManager::class),
+        logger: $container->get(\infrastructure\adapters\YiiLogger::class),
+      ),
+    ],
+  ],
   'modules' => [],
   'components' => [
     'request' => [
