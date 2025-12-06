@@ -13,12 +13,12 @@ class Apple extends Plant
 {
   private const int ROTATION_TIME_HOURS = 5;
   
-  public static function create(PlantColorEnum $color = null): self
+  public static function create(PlantColorEnum $color = PlantColorEnum::RED): self
   {
     return new self(
       type: FruitTypeEnum::APPLE->value,
       plantType: PlantTypeEnum::FRUIT,
-      color: $color ?? PlantColorEnum::RED,
+      color: $color,
     );
   }
   
