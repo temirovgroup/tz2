@@ -13,13 +13,14 @@ use common\domain\enums\PlantStatusEnum;
 use common\domain\enums\PlantTypeEnum;
 use common\domain\valueObjects\Consumption;
 use common\models\Plants;
+use InvalidArgumentException;
 
 class PlantFactory implements PlantFactoryInterface
 {
   public static function createFromModel(Plants $model): Plant
   {
     if (!$model) {
-      throw new \InvalidArgumentException('Модель не может быть null');
+      throw new InvalidArgumentException('Модель не может быть null');
     }
     
     $plantClass = self::getPlantClass($model->type);
@@ -41,7 +42,7 @@ class PlantFactory implements PlantFactoryInterface
     return match($type) {
       FruitTypeEnum::APPLE->value => Apple::class,
 //      'banana' => Banana::class, (пример)
-      default => throw new \InvalidArgumentException("Неизвестный тип растения: $type"),
+      default => throw new InvalidArgumentException("Неизвестный тип растения: $type"),
     };
   }
 }

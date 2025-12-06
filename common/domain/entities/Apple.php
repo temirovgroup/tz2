@@ -11,6 +11,8 @@ use common\domain\enums\PlantTypeEnum;
 
 class Apple extends Plant
 {
+  private const int ROTATION_TIME_HOURS = 5;
+  
   public static function create(PlantColorEnum $color = null): self
   {
     return new self(
@@ -27,6 +29,6 @@ class Apple extends Plant
   
   public function getRotationTimeHours(): int
   {
-    return 5;
+    return self::ROTATION_TIME_HOURS;
   }
 }
