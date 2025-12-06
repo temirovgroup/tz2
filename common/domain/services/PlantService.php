@@ -13,6 +13,8 @@ use common\domain\events\PlantEventInterface;
 use common\domain\exceptions\PlantValidationException;
 use common\domain\repositories\PlantRepositoryInterface;
 use common\models\PlantEvents;
+use ReflectionClass;
+use Throwable;
 
 class PlantService
 {
@@ -115,7 +117,7 @@ class PlantService
         return;
       }
       
-      $reflection = new \ReflectionClass($event);
+      $reflection = new ReflectionClass($event);
       $eventType = $reflection->getShortName(); // короткое имя класса
       
       $eventModel = new PlantEvents();
@@ -131,17 +133,12 @@ class PlantService
           __METHOD__
         );
       }
-    } catch (\Throwable $e) {
+    } catch (Throwable $e) {
       $this->logger->error(
         sprintf('Исключение при сохранении события: %s', $e->getMessage()),
         __METHOD__
       );
     }
-  }
-  
-  public function getAllPlantsAsArray(): array
-  {
-    return array_map($this->mapPlantToArray(...), $this->plantRepository->findAllOrderByIdAsc());
   }
   
   public function getAllPlants(): array
@@ -151,7 +148,7 @@ class PlantService
   
   public function getAllColorsAsArray(): array
   {
-    return array_map(function ($case) {
+    return array_map(static function ($case) {
       return [
         'value' => $case->value,
         'label' => ucfirst($case->value),

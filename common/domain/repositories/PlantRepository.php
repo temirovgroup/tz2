@@ -13,9 +13,15 @@ use common\domain\enums\PlantTypeEnum;
 use common\domain\factories\PlantFactory;
 use common\domain\valueObjects\Consumption;
 use common\models\Plants;
+use RuntimeException;
+use yii\db\Exception;
+use yii\db\StaleObjectException;
 
 class PlantRepository implements PlantRepositoryInterface
 {
+  /**
+   * @throws Exception
+   */
   public function save(Plant $plant): Plant
   {
     $model = Plants::findOne($plant->getId()) ?? new Plants();
@@ -29,7 +35,7 @@ class PlantRepository implements PlantRepositoryInterface
     $model->fallen_at = $plant->getFallenAt();
     
     if (!$model->save()) {
-      throw new \RuntimeException('Ошибка при сохранении растения');
+      throw new RuntimeException('Ошибка при сохранении растения');
     }
     
     $plant->setId($model->id);
@@ -53,6 +59,10 @@ class PlantRepository implements PlantRepositoryInterface
     return array_map(fn($model) => PlantFactory::createFromModel($model), $models);
   }
   
+  /**
+   * @throws \Throwable
+   * @throws StaleObjectException
+   */
   public function delete(Plant $plant): void
   {
     $model = Plants::findOne($plant->getId());

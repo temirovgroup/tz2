@@ -49,16 +49,4 @@ class Consumption
   {
     return $this->milliPercent >= self::PERCENT_MAX * self::SCALE;
   }
-  
-  public function getMilliPercent(): int
-  {
-    return $this->milliPercent;
-  }
-  
-  public static function fromMilliPercent(int $milliPercent): self
-  {
-    $consumption = new self(self::PERCENT_MIN);
-    $consumption->milliPercent = $milliPercent;
-    return $consumption;
-  }
 }
