@@ -17,6 +17,9 @@ use common\domain\valueObjects\Consumption;
 
 abstract class Plant
 {
+  private const int HOUR_IN_SECONDS = 3600;
+  private const int PERCENT_MAX = 100;
+  
   private ?int $id = null;
   private string $type;
   private PlantTypeEnum $plantType;
@@ -64,15 +67,9 @@ abstract class Plant
   
   public function eat(float $percent): void
   {
+    // @todo блокировка на уровне БД или приложения для предотвращения гонок при параллельном поедании
+    
     $this->validateCanEat();
-    
-    if ($percent <= 0 || $percent > 100) {
-      throw new \DomainException('Процент должен быть от 0 до 100');
-    }
-    
-    if ($percent > $this->consumption->getRemainingPercent()) {
-      throw new \DomainException('Нельзя съесть больше, чем осталось');
-    }
     
     $previousConsumption = $this->consumption->getPercent();
     $this->consumption = $this->consumption->add($percent);
@@ -91,7 +88,7 @@ abstract class Plant
       return;
     }
     
-    $hoursElapsed = (time() - $this->fallenAt) / 3600;
+    $hoursElapsed = (time() - $this->fallenAt) / self::HOUR_IN_SECONDS;
     
     if ($hoursElapsed >= $this->getRotationTimeHours()) {
       $this->status = PlantStatusEnum::ROTTEN;
@@ -118,7 +115,7 @@ abstract class Plant
   
   public function getSize(): float
   {
-    return $this->consumption->getRemainingPercent() / 100;
+    return $this->consumption->getRemainingPercent() / self::PERCENT_MAX;
   }
   
   public function getStatus(): PlantStatusEnum
