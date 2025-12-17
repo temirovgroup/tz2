@@ -12,6 +12,9 @@
   
   ```php yii migrate/up```
 
+Добавить в файл hosts:
+`127.0.0.1 tz5.local`
+
 перейти в https://tz2.local/admin/
 
 username: `admin`
